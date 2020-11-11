@@ -4,9 +4,10 @@ connect();
 async function connect() {
 
     try {
-        const connection = await amqp.connect("amqp://localhost:5672")
+        const amqpServer = "amqp://localhost:5672"
+        const connection = await amqp.connect(amqpServer)
         const channel = await connection.createChannel();
-        const result = await channel.assertQueue("jobs");
+        await channel.assertQueue("jobs");
         
         channel.consume("jobs", message => {
             const input = JSON.parse(message.content.toString());
